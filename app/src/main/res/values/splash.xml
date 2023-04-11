@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MyApplication.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#1E3C5C</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_icon_perfil</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
+    </style>
+</resources>
