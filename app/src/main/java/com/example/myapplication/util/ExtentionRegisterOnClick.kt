@@ -21,6 +21,9 @@ fun RegistroActivity.onClickResgisterUser() {
     val confirmPassword = binding.lgConfirmContrasena.text.toString().trim()
     val empresa = binding.lgEmail.text.split("@").get(1)
 
+    val passwordCode = codificarContrasena(password,7)
+
+
     val pattern = Pattern.compile("[^a-zA-Z0-9]")
     val matcher = pattern.matcher(password)
     val containsSpecialChar = matcher.find()
@@ -45,7 +48,7 @@ fun RegistroActivity.onClickResgisterUser() {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val usuario = Usuario(user, email, password, empresa, estado = false)
+                    val usuario = Usuario(user, email, passwordCode, empresa, estado = false)
                     usuariosRef.document(email).set(usuario)
                         .addOnSuccessListener {
                             val intent = Intent(this, MainActivity::class.java)
@@ -110,3 +113,21 @@ data class Usuario(
     //
 }
 
+private fun codificarContrasena(contrasena: String, desplazamiento: Int): String {
+    var contrasenaCodificada = ""
+    for (i in 0 until contrasena.length) {
+        val letra = contrasena[i]
+        if (letra.isLetter()) {
+            var letraCodificada = letra + desplazamiento
+            if (letra.isLowerCase() && letraCodificada > 'z') {
+                letraCodificada -= 26
+            } else if (letra.isUpperCase() && letraCodificada > 'Z') {
+                letraCodificada -= 26
+            }
+            contrasenaCodificada += letraCodificada
+        } else {
+            contrasenaCodificada += letra
+        }
+    }
+    return contrasenaCodificada
+}

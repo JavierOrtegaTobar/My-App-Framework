@@ -11,12 +11,15 @@ import com.example.myapplication.databinding.ActivityLoginBinding
 import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.util.onClickLogin
 import com.example.myapplication.util.onClickResgister
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity(), OnClickListener {
 
     lateinit var binding: ActivityLoginBinding
     var loginAttempts = 0
-    var userBloqued: Boolean = false
+    val db = Firebase.firestore
+    val userFirebase = db.collection("usuarios")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
