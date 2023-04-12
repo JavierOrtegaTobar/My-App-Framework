@@ -2,20 +2,19 @@ package com.example.myapplication.util
 
 import android.app.ActivityOptions
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import com.example.myapplication.HomeActivity
 import com.example.myapplication.LoginActivity
-import com.example.myapplication.MainActivity
 import com.example.myapplication.R
-import com.example.myapplication.RegistroActivity
 import com.google.firebase.auth.FirebaseAuth
 
 
 fun LoginActivity.onClickLogin() {
     val email = binding.lgUsuario.text.toString().trim()
     val password = binding.lgContrasena.text.toString().trim()
-
 
     if (email.isEmpty() || password.isEmpty()) {
         showAlertAddParameters()
@@ -29,33 +28,58 @@ fun LoginActivity.onClickLogin() {
         binding.lgContrasena.error = "La contraseña debe tener al menos 6 caracteres"
         return
     }
-    if (userBloqued){
-        showAlertUserBloq()
-        binding.btnIngresar.isEnabled = false
-    }
 
-    if (loginAttempts < 3 && !userBloqued) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {
-                val intent = Intent(this, HomeActivity::class.java)
-                val animation = ActivityOptions.makeCustomAnimation(
-                    this,
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left
-                ).toBundle()
-                startActivity(intent, animation)
-                finish()
-            } else {
-                showAlert()
-                loginAttempts++
-                if (loginAttempts == 3) {
-                    Toast.makeText(this, "Se han superado el número de intentos permitidos", Toast.LENGTH_SHORT).show()
+
+    if (loginAttempts < 3) {
+        val userRef = userFirebase.document(email)
+        userRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()) {
+                val estado = documentSnapshot.getBoolean("estado") ?: false
+                if (estado) {
+                    showAlertUserBlocked()
+                    binding.btnIngresar.isEnabled = false
+                    return@addOnSuccessListener
                 }
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val intent = Intent(this, HomeActivity::class.java)
+                            val animation = ActivityOptions.makeCustomAnimation(
+                                this,
+                                R.anim.slide_in_right,
+                                R.anim.slide_out_left
+                            ).toBundle()
+                            startActivity(intent, animation)
+                            finish()
+                        } else {
+                            showAlert()
+                            loginAttempts++
+                            if (loginAttempts == 3) {
+                                bloquearUsuarioEnFirebase(email)
+                                Toast.makeText(
+                                    this,
+                                    "Se han superado el número de intentos permitidos",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
             }
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "Error al obtener el documento de usuarios en Firebase", exception)
         }
     } else {
-        Toast.makeText(this, "Se han superado el número de intentos permitidos. Su usuario ha sido bloqueado", Toast.LENGTH_SHORT).show()
-        userBloqued = true
+
+    }
+}
+
+private fun LoginActivity.bloquearUsuarioEnFirebase(email: String) {
+    val userIdDocument = userFirebase.document(email)
+    val data = hashMapOf("estado" to true)
+    userIdDocument.update(data.toMap()).addOnSuccessListener {
+        Log.d(TAG, "Usuario bloqueado en Firebase")
+    }.addOnFailureListener { exception ->
+        Log.e(TAG, "Error al bloquear usuario en Firebase", exception)
     }
 }
 
@@ -83,7 +107,7 @@ private fun LoginActivity.showAlertAddParameters() {
     dialog.show()
 }
 
-private fun LoginActivity.showAlertUserBloq() {
+private fun LoginActivity.showAlertUserBlocked() {
 
     val builder = AlertDialog.Builder(binding.root.context)
     builder.setTitle("Usuario bloqueado")
@@ -92,5 +116,4 @@ private fun LoginActivity.showAlertUserBloq() {
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
-
 
