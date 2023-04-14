@@ -2,13 +2,15 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.print.PrintAttributes.Margins
 import android.text.Editable
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.View.TEXT_ALIGNMENT_CENTER
 import androidx.core.view.marginBottom
+import androidx.core.view.marginRight
 import androidx.core.view.marginStart
 import com.example.myapplication.databinding.ActivityLoginBinding
-import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.util.onClickLogin
 import com.example.myapplication.util.onClickResgister
 import com.google.firebase.firestore.ktx.firestore
@@ -44,19 +46,17 @@ class LoginActivity : AppCompatActivity(), OnClickListener {
         }
         if (!emailUser.isNullOrEmpty()) {
             when {
-                emailUser.contains("@estado") -> {
-                    binding.textView.text = "Bienvenido Usuario de banco estado"
+                emailUser.contains("@estado" ) || emailUser.contains("@bancoestado") -> {
+                    binding.nameEnterprise.text = "Banco Estado"
                 }
 
                 emailUser.contains("@bci") -> {
-                    binding.textView.text = "Bienvenido Usuario de Banco BCI"
-                    binding.imgprofile.setBackgroundResource(R.drawable.logo_bci)
-                    binding.imgprofile.layoutParams.width = 500
-                    binding.imgprofile.layoutParams.height = 400
+                    binding.nameEnterprise.text = "Banco BCI"
+                    binding.imgprofile.setBackgroundResource(R.drawable.ic_bci)
                 }
 
                 emailUser.contains("@santander") -> {
-                    binding.textView.text = "Bienvenido Usuario de Banco Santander"
+                    binding.nameEnterprise.text = "Banco Santander"
                 }
 
                 else -> {

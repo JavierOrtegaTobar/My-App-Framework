@@ -14,4 +14,15 @@
     <color name="background_login_card">#202732</color>
     <color name="transparent">#006A6A6A</color>
 
+    <color name="disablebtn">#5C5B5B</color>
+
+    <color name="backa">#1A1E1E</color>
+
+    <color name="aaaa">#28778F8F</color>
+
+
+    <color name="activebtn1">#FFD700</color>
+    <color name="activebtn">#EDB659</color>
+
+
 </resources>

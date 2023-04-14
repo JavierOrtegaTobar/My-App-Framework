@@ -21,7 +21,11 @@ fun LoginActivity.onClickLogin() {
         return
     }
     if (!isValidEmail(email)) {
-        binding.lgUsuario.error = "Correo electrónico inválido"
+        Toast.makeText(
+            this,
+            "Correo eléctronico invalido",
+            Toast.LENGTH_SHORT
+        ).show()
         return
     }
     if (password.length < 6) {

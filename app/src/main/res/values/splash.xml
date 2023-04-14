@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.MyApplication.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#1E3C5C</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_icon_perfil</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_login</item>
         <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
     </style>
 </resources>
