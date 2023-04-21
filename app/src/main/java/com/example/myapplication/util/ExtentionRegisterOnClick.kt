@@ -109,9 +109,7 @@ data class Usuario(
     val password: String = "",
     val empresa: String = "",
     val estado: Boolean = false
-) {
-    //
-}
+)
 
 private fun codificarContrasena(contrasena: String, desplazamiento: Int): String {
     var contrasenaCodificada = ""

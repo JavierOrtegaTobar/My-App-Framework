@@ -6,7 +6,4 @@
         android:icon="@drawable/ic_icon_perfil"
         android:title="search"
         app:showAsAction="ifRoom" />
-
-
-
 </menu>

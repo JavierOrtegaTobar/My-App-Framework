@@ -30,8 +30,4 @@ class RegistroActivity : AppCompatActivity(), OnClickListener {
             R.id.btnRegisterUser -> onClickResgisterUser()
         }
     }
-
-
-
-
 }
