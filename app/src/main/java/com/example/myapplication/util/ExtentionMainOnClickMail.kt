@@ -1,6 +1,7 @@
 package com.example.myapplication.util
 
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
@@ -28,11 +29,7 @@ fun MainActivity.onClickButtonEmail() {
                     ).toBundle()
                     startActivity(intent, animation)
                 } else {
-                    Toast.makeText(
-                        this,
-                        "El correo ingresado no existe",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showAlertUserNotExist()
                 }
             }.addOnFailureListener { exception ->
                 Log.e(TAG, "Error al obtener el documento de usuarios en Firebase", exception)
@@ -69,4 +66,14 @@ fun MainActivity.buttonEnabledOrDisabled() {
         (!binding.txtEmail.text.isEmpty() || !binding.txtEmail.text.isBlank()) && binding.txtEmail.text.contains(
             "@"
         )
+}
+
+private fun MainActivity.showAlertUserNotExist() {
+
+    val builder = AlertDialog.Builder(binding.root.context)
+    builder.setTitle("Usuario inválido")
+    builder.setMessage("El usuario ingresado no existe, por favor intente registrarse")
+    builder.setPositiveButton("Aceptar", null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
 }
