@@ -33,12 +33,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     val userFirebase = db.collection("usuarios")
     var dataUserCorrect: Boolean = false
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         // splash
         installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)

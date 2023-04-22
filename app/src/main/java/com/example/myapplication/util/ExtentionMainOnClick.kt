@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.myapplication.HomeActivity
 import com.example.myapplication.LoginActivity
@@ -16,23 +17,16 @@ fun LoginActivity.onClickLogin() {
     val email = binding.lgUsuario.text.toString().trim()
     val password = binding.lgContrasena.text.toString().trim()
 
+
     if (email.isEmpty() || password.isEmpty()) {
         showAlertAddParameters()
         return
     }
-    if (!isValidEmail(email)) {
-        Toast.makeText(
-            this,
-            "Correo eléctronico invalido",
-            Toast.LENGTH_SHORT
-        ).show()
-        return
-    }
+
     if (password.length < 6) {
         binding.lgContrasena.error = "La contraseña debe tener al menos 6 caracteres"
         return
     }
-
 
     if (loginAttempts < 3) {
         val userRef = userFirebase.document(email)
@@ -42,8 +36,10 @@ fun LoginActivity.onClickLogin() {
                 if (estado) {
                     showAlertUserBlocked()
                     binding.btnIngresar.isEnabled = false
+                    binding.myProgressBar.visibility = View.GONE
                     return@addOnSuccessListener
                 }
+                binding.myProgressBar.visibility = View.VISIBLE
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
@@ -56,15 +52,18 @@ fun LoginActivity.onClickLogin() {
                             startActivity(intent, animation)
                             finish()
                         } else {
-                            showAlert()
+                            if (loginAttempts <= 1) {
+                                showAlert()
+                                binding.myProgressBar.visibility = View.VISIBLE
+                                binding.btnIngresar.isEnabled = false
+                            }
+                            binding.btnIngresar.isEnabled = true
+                            binding.myProgressBar.visibility = View.GONE
                             loginAttempts++
                             if (loginAttempts == 3) {
                                 bloquearUsuarioEnFirebase(email)
-                                Toast.makeText(
-                                    this,
-                                    "Se han superado el número de intentos permitidos",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                showAlertUserBlockedAttempts()
+                                binding.btnIngresar.isEnabled = false
                             }
                         }
                     }
@@ -73,7 +72,6 @@ fun LoginActivity.onClickLogin() {
             Log.e(TAG, "Error al obtener el documento de usuarios en Firebase", exception)
         }
     } else {
-
     }
 }
 
@@ -87,15 +85,11 @@ private fun LoginActivity.bloquearUsuarioEnFirebase(email: String) {
     }
 }
 
-private fun isValidEmail(email: String): Boolean {
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-}
-
 private fun LoginActivity.showAlert() {
 
     val builder = AlertDialog.Builder(binding.root.context)
-    builder.setTitle("Error")
-    builder.setMessage("Se ha producido un error de autenticacion")
+    builder.setTitle("Clave invalida (${loginAttempts + 1}/3)")
+    builder.setMessage("Contraseña incorrecta vuelva a intentarlo")
     builder.setPositiveButton("Aceptar", null)
     val dialog: AlertDialog = builder.create()
     dialog.show()
@@ -111,11 +105,22 @@ private fun LoginActivity.showAlertAddParameters() {
     dialog.show()
 }
 
+
 private fun LoginActivity.showAlertUserBlocked() {
 
     val builder = AlertDialog.Builder(binding.root.context)
     builder.setTitle("Usuario bloqueado")
     builder.setMessage("Tu usuario se encuentra bloqueado, por favor comunicate con el administrador")
+    builder.setPositiveButton("Aceptar", null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
+
+private fun LoginActivity.showAlertUserBlockedAttempts() {
+
+    val builder = AlertDialog.Builder(binding.root.context)
+    builder.setTitle("Usuario bloqueado (3/3)")
+    builder.setMessage("Se han superado el numero de intentos. su usuario se encuentra bloqueado, por favor comunicate con el administrador")
     builder.setPositiveButton("Aceptar", null)
     val dialog: AlertDialog = builder.create()
     dialog.show()

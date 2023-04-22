@@ -152,29 +152,26 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/btn_redondo"
-            android:clickable="true"
+            android:background="@color/activebtn"
+            android:backgroundTint="@color/active_disable"
+            android:enabled="true"
+            android:foreground="?attr/selectableItemBackground"
             android:text="Ingresar"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-        <Button
-            android:id="@+id/btnRegistrar"
-            android:layout_width="300dp"
+        <ProgressBar
+            android:id="@+id/myProgressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_register"
-            android:clickable="true"
-            android:text="Registrarse"
             android:visibility="gone"
-            android:textColor="@color/gray"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnIngresar"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/btnIngresar"
+            app:layout_constraintEnd_toEndOf="@+id/btnIngresar"
+            app:layout_constraintStart_toStartOf="@+id/btnIngresar"
+            app:layout_constraintTop_toTopOf="@+id/btnIngresar" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
