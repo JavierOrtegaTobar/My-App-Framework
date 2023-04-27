@@ -2,8 +2,10 @@ package com.example.myapplication.util
 
 import android.app.ActivityOptions
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 fun LoginActivity.onClickLogin() {
     val email = binding.lgUsuario.text.toString().trim()
     val password = binding.lgContrasena.text.toString().trim()
+    val emailUser = intent.getStringExtra("email")
 
 
     if (email.isEmpty() || password.isEmpty()) {
@@ -32,8 +35,8 @@ fun LoginActivity.onClickLogin() {
         val userRef = userFirebase.document(email)
         userRef.get().addOnSuccessListener { documentSnapshot ->
             if (documentSnapshot.exists()) {
-                val estado = documentSnapshot.getBoolean("estado") ?: false
-                if (estado) {
+                val userBloqued = documentSnapshot.getBoolean("userBloqued") ?: false
+                if (userBloqued) {
                     showAlertUserBlocked()
                     binding.btnIngresar.isEnabled = false
                     binding.myProgressBar.visibility = View.GONE
@@ -44,6 +47,7 @@ fun LoginActivity.onClickLogin() {
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             val intent = Intent(this, HomeActivity::class.java)
+                            intent.putExtra("emailUser", emailUser)
                             val animation = ActivityOptions.makeCustomAnimation(
                                 this,
                                 R.anim.slide_in_right,
@@ -75,9 +79,62 @@ fun LoginActivity.onClickLogin() {
     }
 }
 
+/*
+fun LoginActivity.getColorsBank(){
+    getUserData()
+    colorFirebase.document(typeBank)
+        .get()
+        .addOnSuccessListener { document ->
+            if (document != null) {
+                val Color1 = document.getString("Color1")
+                val Color2 = document.getString("Color2")
+                val Color3 = document.getString("Color3")
+                val Color4 = document.getString("Color4")
+            }else {
+                Log.d(ContentValues.TAG, "No se encontró ningún documento con el id $typeBank")
+            }
+        }
+}
+*/
+
+fun LoginActivity.getUserData() {
+    val emailUser = intent.getStringExtra("email")
+    if (!emailUser.isNullOrEmpty())
+        binding.lgUsuario.text = Editable.Factory.getInstance().newEditable(emailUser)
+    else {//..
+    }
+    if (!emailUser.isNullOrEmpty()) {
+        when {
+            emailUser.contains("@estado" ) || emailUser.contains("@bancoestado") -> {
+                typeBank = "estado"
+                binding.nameEnterprise.text = "Banco Estado"
+                binding.myProgressBar
+
+                binding.imgprofile.setBackgroundResource(R.drawable.bc_estado)
+            }
+
+            emailUser.contains("@bci") -> {
+                typeBank = "bci"
+                binding.nameEnterprise.text = "Banco BCI"
+                binding.imgprofile.setBackgroundResource(R.drawable.ic_bci)
+            }
+
+            emailUser.contains("@santander") -> {
+                typeBank = "santander"
+                binding.nameEnterprise.text = "Banco Santander"
+                binding.imgprofile.setBackgroundResource(R.drawable.ic_bci)
+            }
+            else -> {
+                errorWhitUser()
+                binding.btnIngresar.isEnabled = false
+            }
+        }
+    }
+}
+
 private fun LoginActivity.bloquearUsuarioEnFirebase(email: String) {
     val userIdDocument = userFirebase.document(email)
-    val data = hashMapOf("estado" to true)
+    val data = hashMapOf("userBloqued" to true)
     userIdDocument.update(data.toMap()).addOnSuccessListener {
         Log.d(TAG, "Usuario bloqueado en Firebase")
     }.addOnFailureListener { exception ->
@@ -121,6 +178,16 @@ private fun LoginActivity.showAlertUserBlockedAttempts() {
     val builder = AlertDialog.Builder(binding.root.context)
     builder.setTitle("Usuario bloqueado (3/3)")
     builder.setMessage("Se han superado el numero de intentos. su usuario se encuentra bloqueado, por favor comunicate con el administrador")
+    builder.setPositiveButton("Aceptar", null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
+
+private fun LoginActivity.errorWhitUser() {
+
+    val builder = AlertDialog.Builder(binding.root.context)
+    builder.setTitle("Error de usuario")
+    builder.setMessage("El usuario ingresado no es correcto. por favor ingrese uno valido.")
     builder.setPositiveButton("Aceptar", null)
     val dialog: AlertDialog = builder.create()
     dialog.show()

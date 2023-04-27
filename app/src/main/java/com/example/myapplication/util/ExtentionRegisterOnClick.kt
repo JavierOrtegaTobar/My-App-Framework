@@ -58,7 +58,7 @@ fun RegistroActivity.onClickResgisterUser() {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val usuario = Usuario(user, email, passwordCode, empresa, estado = false)
+                    val usuario = Usuario(user, email, passwordCode, empresa, userBloqued = false, typeUser = "" )
                     usuariosRef.document(email).set(usuario)
                         .addOnSuccessListener {
                             val intent = Intent(this, MainActivity::class.java)
@@ -132,7 +132,8 @@ data class Usuario(
     val email: String = "",
     val password: String = "",
     val empresa: String = "",
-    val estado: Boolean = false
+    val userBloqued: Boolean = false,
+    val typeUser: String = ""
 )
 
 private fun codificarContrasena(contrasena: String, desplazamiento: Int): String {
