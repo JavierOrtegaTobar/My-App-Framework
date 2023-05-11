@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#F371BCBC"
+        app:cardBackgroundColor="#F34B4C4C"
         android:layout_margin="8dp"
         app:cardCornerRadius="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,44 +30,52 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:textColor="@color/white"
                 android:text="Nombre del titular:" />
 
             <EditText
                 android:id="@+id/et_holder_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/white"
                 android:hint="Ingrese el nombre del titular de la cuenta" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Número de cuenta:" />
 
             <EditText
                 android:id="@+id/et_account_number"
                 android:layout_width="match_parent"
+                android:textColorHint="@color/white"
                 android:layout_height="wrap_content"
                 android:hint="Ingrese el número de cuenta" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:text="Tipo de cuenta:" />
 
             <RadioGroup
                 android:id="@+id/radio_group_account_type"
                 android:layout_width="match_parent"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content">
 
                 <RadioButton
                     android:id="@+id/radio_btn_savings"
                     android:layout_width="wrap_content"
+                    android:textColor="@color/white"
                     android:layout_height="wrap_content"
                     android:text="Ahorros" />
 
                 <RadioButton
                     android:id="@+id/radio_btn_checking"
                     android:layout_width="wrap_content"
+                    android:textColor="@color/white"
                     android:layout_height="wrap_content"
                     android:text="Corriente" />
 
@@ -77,9 +85,10 @@
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
                 android:text="Guardar" />
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

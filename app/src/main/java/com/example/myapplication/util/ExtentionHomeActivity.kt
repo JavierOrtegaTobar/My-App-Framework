@@ -11,32 +11,40 @@ fun HomeActivity.menuDependingBank() {
         .document(idDocumento)
         .get()
         .addOnSuccessListener { document ->
-            if (document != null) {
-                // Obtiene los valores de los botones del documento
-                val btn1 = document.getString("btn1")
-                val btn2 = document.getString("btn2")
-                val btn3 = document.getString("btn3")
-                val btn4 = document.getString("btn4")
-                val btn5 = document.getString("btn5")
-                val btn6 = document.getString("btn6")
-                val btn7 = document.getString("btn7")
-                val btn8 = document.getString("btn8")
+            if (isAdminUser) {
+                if (document != null) {
+                    // Obtiene los valores de los botones del documento
+                    val btn1 = document.getString("btn1")
+                    val btn2 = document.getString("btn2")
+                    val btn3 = document.getString("btn3")
+                    val btn4 = document.getString("btn4")
+                    val btn5 = document.getString("btn5")
+                    val btn6 = document.getString("btn6")
+                    val btn7 = document.getString("btn7")
+                    val btn8 = document.getString("btn8")
 
-                val items = listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
-                    .filterNotNull()
-                    .toMutableList()
-                val adapter = MyAdapter(items) { position ->
-                    if (position == 1) {
-                        pressMenu = true
-                        setOnclickInMenu()
-                    }else{
-                        pressMenu = false
-                        setOnclickInMenu()
+                    val items = listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
+                        .filterNotNull()
+                        .toMutableList()
+                    val adapter = MyAdapter(items) { position ->
+                        if (position == 1) {
+                            pressMenu = true
+                            setOnclickInMenu()
+                            binding.rvComponentMenu.root.visibility = View.GONE
+                        } else {
+                            pressMenu = false
+                            setOnclickInMenu()
+                        }
                     }
+                    recyclerView.adapter = adapter
+                } else {
+                    Log.d(
+                        ContentValues.TAG,
+                        "No se encontró ningún documento con el id $idDocumento"
+                    )
                 }
-                recyclerView.adapter = adapter
-            } else {
-                Log.d(ContentValues.TAG, "No se encontró ningún documento con el id $idDocumento")
+            }else{
+
             }
         }
         .addOnFailureListener { exception ->
@@ -87,16 +95,19 @@ fun HomeActivity.typeUser() {
                 typeUser == "administrador" || typeUser == "Admin" -> {
                     binding.progressbar.textTyperUser.text = "Administrador :"
                     binding.progressbar.textNameUser.text = userName
+                    isAdminUser = true
                 }
 
                 typeUser == "cliente" -> {
                     binding.progressbar.textTyperUser.text = "Cliente :"
                     binding.progressbar.textNameUser.text = userName
+                    isAdminUser = false
                 }
 
                 else -> {
-                    binding.progressbar.textTyperUser.text = "Cliente :"
+                    binding.progressbar.textTyperUser.text = "Administrador :"
                     binding.progressbar.textNameUser.text = userName
+                    isAdminUser = true
                 }
             }
         } else {
