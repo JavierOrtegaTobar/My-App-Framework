@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
-class MyAdapter(private val items: List<String>) :
+class MyAdapter(private val items: MutableList<String>, private val listener: (Int) -> Unit) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,7 +21,12 @@ class MyAdapter(private val items: List<String>) :
         if (!currentItem.isNullOrEmpty()) {
             holder.textView.text = currentItem
             holder.itemView.visibility = View.VISIBLE
+            holder.itemView.setOnClickListener {
+                listener(position)
+            }
         } else {
+            items.removeAt(position)
+            notifyItemRemoved(position)
             holder.itemView.visibility = View.GONE
         }
     }

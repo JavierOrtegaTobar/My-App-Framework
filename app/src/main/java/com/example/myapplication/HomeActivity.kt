@@ -30,6 +30,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var idDocumento: String
     lateinit var binding: ActivityHomeBinding
     val db = FirebaseFirestore.getInstance()
+    var pressMenu: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

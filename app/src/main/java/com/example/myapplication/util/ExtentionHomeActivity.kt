@@ -2,10 +2,11 @@ package com.example.myapplication.util
 
 import android.content.ContentValues
 import android.util.Log
+import android.view.View
 import com.example.myapplication.Class.MyAdapter
 import com.example.myapplication.HomeActivity
 
-fun HomeActivity.menuDependingBank(){
+fun HomeActivity.menuDependingBank() {
     db.collection("banco")
         .document(idDocumento)
         .get()
@@ -21,8 +22,18 @@ fun HomeActivity.menuDependingBank(){
                 val btn7 = document.getString("btn7")
                 val btn8 = document.getString("btn8")
 
-                val items = listOf(btn1 ?: "", btn2 ?: "", btn3 ?: "", btn4 ?: "", btn5 ?: "", btn6 ?: "", btn7 ?: "", btn8 ?: "")
-                val adapter = MyAdapter(items)
+                val items = listOf(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
+                    .filterNotNull()
+                    .toMutableList()
+                val adapter = MyAdapter(items) { position ->
+                    if (position == 1) {
+                        pressMenu = true
+                        setOnclickInMenu()
+                    }else{
+                        pressMenu = false
+                        setOnclickInMenu()
+                    }
+                }
                 recyclerView.adapter = adapter
             } else {
                 Log.d(ContentValues.TAG, "No se encontró ningún documento con el id $idDocumento")
@@ -33,6 +44,15 @@ fun HomeActivity.menuDependingBank(){
         }
 }
 
+fun HomeActivity.setOnclickInMenu() {
+    if (pressMenu) {
+        binding.Menu2.root.visibility = View.VISIBLE
+        binding.textBienvenido.visibility = View.GONE
+    } else {
+        binding.Menu2.root.visibility = View.GONE
+        binding.textBienvenido.visibility = View.VISIBLE
+    }
+}
 
 
 fun HomeActivity.bankUser() {
@@ -42,9 +62,11 @@ fun HomeActivity.bankUser() {
             emailUserFirebase.contains("@estado") || emailUserFirebase.contains("@bancoestado") -> {
                 idDocumento = "estado"
             }
+
             emailUserFirebase.contains("@bci") -> {
                 idDocumento = "bci"
             }
+
             emailUserFirebase.contains("@santander") -> {
                 idDocumento = "santander"
             }
@@ -52,7 +74,7 @@ fun HomeActivity.bankUser() {
     }
 }
 
-fun HomeActivity.typeUser(){
+fun HomeActivity.typeUser() {
     val emailUser = intent.getStringExtra("emailUser") as String
     val documentRef = db.collection("usuarios").document(emailUser)
 
@@ -66,10 +88,12 @@ fun HomeActivity.typeUser(){
                     binding.progressbar.textTyperUser.text = "Administrador :"
                     binding.progressbar.textNameUser.text = userName
                 }
+
                 typeUser == "cliente" -> {
                     binding.progressbar.textTyperUser.text = "Cliente :"
                     binding.progressbar.textNameUser.text = userName
                 }
+
                 else -> {
                     binding.progressbar.textTyperUser.text = "Cliente :"
                     binding.progressbar.textNameUser.text = userName
