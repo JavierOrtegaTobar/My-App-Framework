@@ -69,7 +69,7 @@ fun LoginActivity.onClickLogin() {
                             loginAttempts++
                             if (loginAttempts == 3) {
                                 bloquearUsuarioEnFirebase(email)
-                                enviarDatos("Warning", "${getString(R.string.User_bloq)}" )
+                                enviarDatos("Warning", "${getString(R.string.User_bloq_attemps)}" )
                                 showAlertUserBlockedAttempts()
                                 binding.btnIngresar.isEnabled = false
                             }
