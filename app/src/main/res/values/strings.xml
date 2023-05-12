@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name"> </string>
+    <string name="error">Ingrese un correo electrónico válido</string>
+    <string name="invalid_password">El usuario ingreso mal su contraseña </string>
+    <string name="User_bloq">Usuario Bloqueado</string>
+    <string name="User_bloq_attemps">Usuario Bloqueado por superar limite de inicio de sesion</string>
+    <string name="User_click">El usuario ha seleccionado una opcion</string>
+    <string name="success_login">Usuario logeado con exito</string>
+    <string name="press_btn">El usuario selecciono opcion</string>
 </resources>

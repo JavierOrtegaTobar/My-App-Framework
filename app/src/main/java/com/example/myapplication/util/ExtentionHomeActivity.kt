@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import com.example.myapplication.Class.MyAdapter
 import com.example.myapplication.HomeActivity
+import com.example.myapplication.R
 
 fun HomeActivity.menuDependingBank() {
     db.collection("banco")
@@ -30,6 +31,7 @@ fun HomeActivity.menuDependingBank() {
                         if (position == 1) {
                             pressMenu = true
                             setOnclickInMenu()
+                            enviarDatos("Info", getString(R.string.press_btn))
                             binding.rvComponentMenu.root.visibility = View.GONE
                         } else {
                             pressMenu = false
@@ -95,19 +97,16 @@ fun HomeActivity.typeUser() {
                 typeUser == "administrador" || typeUser == "Admin" -> {
                     binding.progressbar.textTyperUser.text = "Administrador :"
                     binding.progressbar.textNameUser.text = userName
-                    isAdminUser = true
                 }
 
                 typeUser == "cliente" -> {
                     binding.progressbar.textTyperUser.text = "Cliente :"
                     binding.progressbar.textNameUser.text = userName
-                    isAdminUser = false
                 }
 
                 else -> {
                     binding.progressbar.textTyperUser.text = "Administrador :"
                     binding.progressbar.textNameUser.text = userName
-                    isAdminUser = true
                 }
             }
         } else {

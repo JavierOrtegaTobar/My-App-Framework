@@ -30,12 +30,13 @@ fun MainActivity.onClickButtonEmail() {
                     startActivity(intent, animation)
                 } else {
                     showAlertUserNotExist()
+                    enviarDatos("Error", "${getString(R.string.error)}" )
                 }
             }.addOnFailureListener { exception ->
                 Log.e(TAG, "Error al obtener el documento de usuarios en Firebase", exception)
             }
     } else {
-        Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${getString(R.string.error)}", Toast.LENGTH_SHORT).show()
     }
 }
 

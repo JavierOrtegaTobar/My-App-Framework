@@ -38,6 +38,8 @@ fun LoginActivity.onClickLogin() {
                 val userBloqued = documentSnapshot.getBoolean("userBloqued") ?: false
                 if (userBloqued) {
                     showAlertUserBlocked()
+                    enviarDatos("Warning", "${getString(R.string.User_bloq)}" )
+
                     binding.btnIngresar.isEnabled = false
                     binding.myProgressBar.visibility = View.GONE
                     return@addOnSuccessListener
@@ -58,6 +60,7 @@ fun LoginActivity.onClickLogin() {
                         } else {
                             if (loginAttempts <= 1) {
                                 showAlert()
+                                enviarDatos("Error", "${getString(R.string.invalid_password)}" )
                                 binding.myProgressBar.visibility = View.VISIBLE
                                 binding.btnIngresar.isEnabled = false
                             }
@@ -66,6 +69,7 @@ fun LoginActivity.onClickLogin() {
                             loginAttempts++
                             if (loginAttempts == 3) {
                                 bloquearUsuarioEnFirebase(email)
+                                enviarDatos("Warning", "${getString(R.string.User_bloq)}" )
                                 showAlertUserBlockedAttempts()
                                 binding.btnIngresar.isEnabled = false
                             }
