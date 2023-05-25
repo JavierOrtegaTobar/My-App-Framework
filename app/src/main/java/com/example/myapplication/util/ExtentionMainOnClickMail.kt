@@ -8,6 +8,7 @@ import android.content.Intent
 import android.text.Editable
 import android.util.Log
 import android.widget.Toast
+import com.example.myapplication.Expand
 import com.example.myapplication.LoginActivity
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
@@ -42,6 +43,17 @@ fun MainActivity.onClickButtonEmail() {
 
 fun MainActivity.onClickResgister() {
     val intent = Intent(this, RegistroActivity::class.java)
+    val animation = ActivityOptions.makeCustomAnimation(
+        this,
+        R.anim.slide_in_right,
+        R.anim.slide_out_left
+    ).toBundle()
+    startActivity(intent, animation)
+
+}
+
+fun MainActivity.onClickExpand() {
+    val intent = Intent(this, Expand::class.java)
     val animation = ActivityOptions.makeCustomAnimation(
         this,
         R.anim.slide_in_right,

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/borde_top_bottom_navigation">
+        <shape
+            android:layout_width="match_parent"
+            android:color="#eaeaea"
+            android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:topLeftRadius="20dp" android:topRightRadius="20dp" />
+        </shape>
+    </item>
+
+
+</layer-list>

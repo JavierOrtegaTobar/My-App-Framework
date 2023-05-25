@@ -110,6 +110,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnIngresarEmail" />
+
+        <Button
+            android:id="@+id/btnTst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/activebtn"
+            android:layout_marginTop="20dp"
+            android:enabled="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:text="expand"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

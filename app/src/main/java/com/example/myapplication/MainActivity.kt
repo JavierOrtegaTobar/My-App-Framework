@@ -20,6 +20,7 @@ import com.example.myapplication.databinding.ActivityMainBinding
 import com.example.myapplication.util.buttonEnabledOrDisabled
 import com.example.myapplication.util.getUserData
 import com.example.myapplication.util.onClickButtonEmail
+import com.example.myapplication.util.onClickExpand
 import com.example.myapplication.util.onClickResgister
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         })
         binding.btnRegister.setOnClickListener(this)
         binding.btnIngresarEmail.setOnClickListener(this)
+        binding.btnTst.setOnClickListener(this)
 
         getUserData()
     }
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         when (v?.id) {
             R.id.btnIngresarEmail -> onClickButtonEmail()
             R.id.btnRegister -> onClickResgister()
+            R.id.btnTst -> onClickExpand()
         }
     }
 }
